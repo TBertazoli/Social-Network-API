@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const { default: isEmail } = require('validator/lib/isEmail');
 const dateFormat = require('../utils/dateFormat');
 
 const Thought = new Schema(
@@ -25,6 +24,37 @@ const Thought = new Schema(
 
             }
         ],
+    },
+    {
+        toJSON: {
+            virtuals: true,
+            getters: true
+        },
+        id: false
+    }
+);
+
+const Reaction = new Schema(
+    {
+        reactionId: {
+            type: String,
+            
+        },
+        reactionBody: {
+            type: String,
+            required: true,
+            //Must be between 1 and 280 characters
+
+        },
+        username: {
+            type: String,
+            required: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            get: createdAtVal => dateFormat(createdAtVal)
+        }
     },
     {
         toJSON: {

@@ -41,11 +41,11 @@ const User = new Schema(
     }
 );
 
-// get total count of comments and replies on retrieval
-// PizzaSchema.virtual('friendCount').get(function () {
+//Create a virtual called friendCount that retrieves the length of the user's friends array field on query.
+// UserSchema.virtual('friendCount').get(function () {
 //     return this.comments.reduce((total, comment) => total + comment.replies.length + 1, 0);
 // });
 
-// const Pizza = model('Pizza', PizzaSchema);
+// const User = model('User', UserSchema);
 
 module.exports = User;
