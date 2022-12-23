@@ -1,50 +1,16 @@
 const { Schema, model } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
-const Thought = new Schema(
-    {
-        thoughtText: {
-            type: String,
-            required: true,
-            //Must be between 1 and 280 characters
-
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-            get: createdAtVal => dateFormat(createdAtVal)
-        },
-        username: {
-            type: String,
-            required: true,
-        },
-        reactions: [
-            {
-                // Array of nested documents created with the reactionSchema
-
-            }
-        ],
-    },
-    {
-        toJSON: {
-            virtuals: true,
-            getters: true
-        },
-        id: false
-    }
-);
-
-const Reaction = new Schema(
+const ReactionSchema = new Schema(
     {
         reactionId: {
-            type: String,
-            
+            type: Schema.Types.ObjectId,
+            default: () => new Types.ObjectId()            
         },
         reactionBody: {
             type: String,
             required: true,
-            //Must be between 1 and 280 characters
-
+            maxlength: 280           
         },
         username: {
             type: String,
@@ -65,7 +31,42 @@ const Reaction = new Schema(
     }
 );
 
+const Thought = new Schema(
+    {
+        thoughtText: {
+            type: String,
+            required: true,
+            minlength: 1,
+            maxlength: 280           
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            get: createdAtVal => dateFormat(createdAtVal)
+        },
+        username: {
+            type: String,
+            required: true,
+        },
+        reactions: [ReactionSchema]          
+    },
+    {
+        toJSON: {
+            virtuals: true,
+            getters: true
+        },
+        id: false
+    }
+);
+
+
+
 
 // Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.
+ReactionSchema.virtual('reactionCount').get(function() {
+    return this.reaction.length;
+});
+  
+const Reactions = model('Reactions', ReactionSchema);
 
-module.exports = Thought;
+module.exports = Thought, Reactions;
