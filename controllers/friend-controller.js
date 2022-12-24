@@ -2,7 +2,7 @@ const { User, Thought } = require('../models');
 
 const friendController = {
     // add comment to pizza
-    addComment({ params, body }, res) {
+    addNewFriend({ params, body }, res) {
         console.log(body);
         Comment.create(body)
             .then(({ _id }) => {
