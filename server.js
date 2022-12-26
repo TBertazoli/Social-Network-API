@@ -17,6 +17,7 @@ mongoose.connect(
 );
 
 // Use this to log mongo queries being executed!
+// mongoose.set("strictQuery", true);
 mongoose.set('debug', true);
 
 app.use(require('./routes'));
