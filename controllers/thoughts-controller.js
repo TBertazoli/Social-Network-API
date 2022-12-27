@@ -21,7 +21,6 @@ const thoughtsController = {
                 });
         },
 
-
     // add thoughts to user
     addThoughts({ body }, res) {
         console.log(body);
@@ -42,6 +41,19 @@ const thoughtsController = {
             })
             .catch(err => res.status(400).json(err));
     },
+
+        // update thought by id
+        updateThoughts({ params, body }, res) {
+            Thought.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
+                .then(dbData => {
+                    if (!dbData) {
+                        res.status(404).json({ message: 'No user found with this id!' });
+                        return;
+                    }
+                    res.json(dbData);
+                })
+                .catch(err => res.status(400).json(err));
+        },
 
     //delete thoughts
     // deleteThoughts({ params, body }, res) {
