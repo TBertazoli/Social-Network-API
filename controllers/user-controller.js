@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { friends } = require('mongoose-friends')
+
 
 const userController = {
     // get all users
@@ -71,7 +71,6 @@ const userController = {
             .catch(err => res.status(400).json(err));
     },
 
-
     // remove friend
     removeFriend({ params }, res) {
         User.findOneAndUpdate(
@@ -89,8 +88,6 @@ const userController = {
 
     },
 };
-
-
 
 
 module.exports = userController;
