@@ -11,6 +11,17 @@ const thoughtsController = {
             });
     },
 
+        // get a thought by id
+        getThoughtsById({ params }, res) {
+        Thought.findOne({ _id: params.id })
+                .then(dbData => res.json(dbData))
+                .catch(err => {
+                    console.log(err);
+                    res.sendStatus(400);
+                });
+        },
+
+
     // add thoughts to user
     addThoughts({ body }, res) {
         console.log(body);
