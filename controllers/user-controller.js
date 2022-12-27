@@ -1,15 +1,16 @@
 const { User } = require('../models');
+const {friends} = require('mongoose-friends')
 
 const userController = {
     // get all users
     getAllUsers(req, res) {
         User.find({})
-            // .populate({
-            //     path: 'friends',
-            //     select: '-__v'
-            // })
-            // .select('-__v')
-            // .sort({ _id: -1 })
+            .populate({
+                path: 'friends',
+                select: '-__v'
+            })
+            .select('-__v')
+            .sort({ _id: -1 })
             .then(dbData => res.json(dbData))
             .catch(err => {
                 console.log(err);
@@ -34,8 +35,8 @@ const userController = {
 
     // create User
     createUser({ body }, res) {
-        User.create(body)        
-            .then(dbData => res.json(dbData))       
+        User.create(body)
+            .then(dbData => res.json(dbData))
             .catch(err => res.json(err));
     },
 
@@ -57,7 +58,24 @@ const userController = {
         User.findOneAndDelete({ _id: params.id })
             .then(dbData => res.json(dbData))
             .catch(err => res.json(err));
-    }
+    },
+
+    // Add friend
+    // addFriend({ body }, res) {
+    //     User.findByIdAndUpdate({}, body, { new: true, runValidators: true })
+            
+    //     .then(dbData => {
+    //         if (!dbData) {
+    //             res.status(404).json({ message: 'No user found with this id!' });
+    //             return;
+    //         }
+    //         res.json(dbData);
+    //     })
+    //     .catch(err => res.status(400).json(err));
+    // },
 };
+
+
+
 
 module.exports = userController;
