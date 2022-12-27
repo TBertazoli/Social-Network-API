@@ -5,11 +5,6 @@ const userController = {
     // get all users
     getAllUsers(req, res) {
         User.find({})
-            .populate({
-                path: 'friends',
-                select: '-__v'
-            })
-            .select('-__v')
             .sort({ _id: -1 })
             .then(dbData => res.json(dbData))
             .catch(err => {
@@ -61,22 +56,43 @@ const userController = {
     },
 
     // Add friend
-    addFriend({ params, body }, res) {
-        User.findById({ _id: body.userId })
-            .then(friend => {
-                User.findOneAndUpdate(
-                    { _id: params.id },
-                    { $push: { friends: friend } },
-                    { new: true })
-                    .then(dbData => {
-                        if (!dbData) {
-                            res.status(404).json({ message: 'No user found with this id!' });
-                            return;
-                        }
-                        res.json(dbData);
-                    })
-                    .catch(err => res.status(400).json(err));
-        }).catch(err => res.status(400).json(err));
+    addFriend({ params }, res) {
+        User.findOneAndUpdate(
+            { _id: params.id },
+            { $push: { friends: params.friendId } },
+            { new: true })
+            .then(dbData => {
+                if (!dbData) {
+                    res.status(404).json({ message: 'No user found with this id!' });
+                    return;
+                }
+                res.json(dbData);
+            })
+            .catch(err => res.status(400).json(err));
+    },
+
+
+    // remove friend
+    removeFriend({ params }, res) {
+        User.findOneAndDelete({ _id: params.id })
+            .then(friendId => {
+                if (!friendId) {
+                    return res.status(404).json({ message: 'No thought with this id!' });
+                }
+                return User.findOneAndUpdate(
+                    { username: friendId.username },
+                    { $pull: { friends: params.id } },
+                    { new: true }
+                );
+            })
+            .then(dbData => {
+                if (!dbData) {
+                    res.status(404).json({ message: 'No thought found with this id!2' });
+                    return;
+                }
+                res.json(dbData);
+            })
+            .catch(err => res.json(err));
 
     },
 };
