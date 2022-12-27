@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const {friends} = require('mongoose-friends')
+const { friends } = require('mongoose-friends')
 
 const userController = {
     // get all users
@@ -61,18 +61,24 @@ const userController = {
     },
 
     // Add friend
-    // addFriend({ body }, res) {
-    //     User.findByIdAndUpdate({}, body, { new: true, runValidators: true })
-            
-    //     .then(dbData => {
-    //         if (!dbData) {
-    //             res.status(404).json({ message: 'No user found with this id!' });
-    //             return;
-    //         }
-    //         res.json(dbData);
-    //     })
-    //     .catch(err => res.status(400).json(err));
-    // },
+    addFriend({ params, body }, res) {
+        User.findById({ _id: body.userId })
+            .then(friend => {
+                User.findOneAndUpdate(
+                    { _id: params.id },
+                    { $push: { friends: friend } },
+                    { new: true })
+                    .then(dbData => {
+                        if (!dbData) {
+                            res.status(404).json({ message: 'No user found with this id!' });
+                            return;
+                        }
+                        res.json(dbData);
+                    })
+                    .catch(err => res.status(400).json(err));
+        }).catch(err => res.status(400).json(err));
+
+    },
 };
 
 
