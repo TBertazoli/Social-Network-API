@@ -51,21 +51,18 @@ const userController = {
 
     // delete User
     async deleteUser({ params }, res) {
-        const user = await User.findById({ _id: params.id })
-            .then(dbData => {
-                if (!dbData) {
-                    res.status(404).json({ message: 'no user found with this id!' });
-                    return;
-                }
-                Thought.deleteMany({ username: user.username });
-                User.findOneAndDelete(
-                    { _id: params.id })
-                    .then(dbData => res.json(dbData))
-                    .catch(err => res.json(err));
-            })
+        const user = await User.findById({ _id: params.id });
+        if (!user) {
+            res.status(404).json({ message: 'no user found with this id!' });
+            return;
+        }
+        Thought.deleteMany({ username: user.username })
+        User.findOneAndDelete(
+            { _id: params.id })
+            .then(dbData => res.json(dbData))
             .catch(err => res.json(err));
     },
-    
+
     // Add friend
     addFriend({ params }, res) {
         User.findOneAndUpdate(
@@ -82,22 +79,22 @@ const userController = {
             .catch(err => res.status(400).json(err));
     },
 
-    // remove friend
-    removeFriend({ params }, res) {
-        User.findOneAndUpdate(
-            { _id: params.id },
-            { $pull: { friends: params.friendId } },
-            { new: true })
-            .then(dbData => {
-                if (!dbData) {
-                    res.status(404).json({ message: 'No friend found with this id!' });
-                    return;
-                }
-                res.json(dbData);
-            })
-            .catch(err => res.json(err));
+        // remove friend
+        removeFriend({ params }, res) {
+    User.findOneAndUpdate(
+        { _id: params.id },
+        { $pull: { friends: params.friendId } },
+        { new: true })
+        .then(dbData => {
+            if (!dbData) {
+                res.status(404).json({ message: 'No friend found with this id!' });
+                return;
+            }
+            res.json(dbData);
+        })
+        .catch(err => res.json(err));
 
-    },
+},
 };
 
 
