@@ -1,4 +1,5 @@
-const { User } = require('../models');
+const { User, Thought } = require('../models');
+const thoughtsController = require('./thoughts-controller');
 
 
 const userController = {
@@ -49,12 +50,22 @@ const userController = {
     },
 
     // delete User
-    deleteUser({ params }, res) {
-        User.findOneAndDelete({ _id: params.id })
-            .then(dbData => res.json(dbData))
+    async deleteUser({ params }, res) {
+        const user = await User.findById({ _id: params.id })
+            .then(dbData => {
+                if (!dbData) {
+                    res.status(404).json({ message: 'no user found with this id!' });
+                    return;
+                }
+                Thought.deleteMany({ username: user.username });
+                User.findOneAndDelete(
+                    { _id: params.id })
+                    .then(dbData => res.json(dbData))
+                    .catch(err => res.json(err));
+            })
             .catch(err => res.json(err));
     },
-
+    
     // Add friend
     addFriend({ params }, res) {
         User.findOneAndUpdate(
