@@ -3,9 +3,7 @@
    ## Description
    This project is a Social Network API where you can create new users and the users can share their thoughts, add friends and react to friend's thoughts. The technologies used where Express.js, MongoDB database.
 
-   <img src="images/Screenshot 2022-12-22 214519.png">
-
-   <img src="images/Screenshot 2022-12-22 214915.png">
+   <img src="images/Screenshot 2022-12-28 160354.png">
 
    ## Badges  
 
@@ -47,7 +45,7 @@
 
    GitHub repository link: https://github.com/TBertazoli/Social-Network-API
 
-   Heroku: https://text-editor-pwabertazoli.herokuapp.com/   
+   Video Link: https://drive.google.com/file/d/1NAcs2CLCfdRdiZtivYzZ00dgxafkhCAX/view 
    
    email: tatianabertazoli@gmail.com
    
